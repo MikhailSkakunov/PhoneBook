@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Person update</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+
+<form th:method="patch" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
+    <input type="hidden" name="_metod" value="PATCH">
+    <label for="firstName">Введите Имя: </label>
+    <input th:type="text" th:field="*{firstName}" id="firstName"/>
+    <br>
+    <label for="surname">Введите Отчество: </label>
+    <input th:type="text" th:field="*{surname}" id="surname"/>
+    <br>
+    <label for="patronymic">Введите Фамилию: </label>
+    <input th:type="text" th:field="*{patronymic}" id="patronymic"/>
+    <br>
+    <label for="city">Введите индекс и название города: </label>
+    <input th:type="text" th:field="*{address.city}" id="city"/>
+
+    <div id="MyAddress">
+        <label>Выбирите название улицы: </label>
+        <select th:field="*{address.street}">
+            <option th:each="str : ${street}"
+                    th:text="${str.streetName}"
+                    th:value="${str.id}">
+            </option>
+        </select>
+    </div>
+
+    <label for="buildingNumber">Введите номер дома: </label>
+    <input th:type="text" th:field="*{address.buildingNumber}" id="buildingNumber"/>
+
+    <div class="myPhones">
+        <label for="phone">Введите номер телефона: </label>
+        <div th:each="phone, itemStat : *{phones}" id="phone">
+            <input th:field="*{phones[__${itemStat.index}__].number}"/>
+            <label for="phoneType">Тип телефона</label>
+            <select id="phoneType" required>
+                <option th:each="phType : ${phoneTypes}"
+                        th:text="${phType.typeName}"
+                        th:value="${phType.id}"
+                        th:selected="${phone.phoneType.id == phType.id}">
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="myPhones1">
+        <label for="phone">Введите номер телефона: </label>
+        <div th:each="phone, itemStat : *{phones}" id="phone">
+            <input th:field="*{phones[__${itemStat.index}__].number}"/>
+            <label for="phoneType">Тип телефона</label>
+            <select id="phoneType" required>
+                <option th:each="phType : ${phoneTypes}"
+                        th:text="${phType.typeName}"
+                        th:value="${phType.id}"
+                        th:selected="${phone.phoneType.id == phType.id}">
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <input name="phones[0].number" type="text"/>
+    <label for="phoneType">Тип телефона</label>
+    <select id="phoneType" name="phones[0].phoneType" required>
+        <option th:each="phType : ${phoneTypes}"
+                th:text="${phType.typeName}"
+                th:value="${phType.id}"
+                th:selected="${phType.id == phType.id}"></option>
+    </select>
+    <br>
+
+        <input name="phones[1].number" type="text"/>
+        <label for="phoneType">Тип телефона</label>
+        <select id="phoneType" name="phones[1].phoneType" required>
+            <option th:each="phType : ${phoneTypes}"
+                    th:text="${phType.typeName}"
+                    th:value="${phType.id}"
+                    th:selected="${phType.id == phType.id}"></option>
+        </select>
+    <br>
+    <br>
+
+
+    <button type="button" name="add_phone">Добавить телефон</button>
+    <br>
+
+    <input type="submit" name="update" value="Обновить">
+</form>
+
+</body>
+</html>

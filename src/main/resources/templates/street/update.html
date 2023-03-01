@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Street update</title>
+</head>
+<body>
+<form th:method="patch" th:action="@{/street/{id}(id=${street.getId()})}" th:object="${street}">
+    <input type="hidden" name="_metod" value="PATCH">
+    <label for="streetName">Введите название улицы: </label>
+    <input th:type="text" th:field="*{streetName}" id="streetName"/>
+    <br>
+    <input type="submit" value="Обновить">
+</form>
+
+    </div>
+</div>
+
+
+</body>
+</html>

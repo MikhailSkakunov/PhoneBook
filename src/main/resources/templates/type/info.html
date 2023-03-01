@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Info phoneType</title>
+</head>
+<body>
+
+<p th:text="${type.getId() + '. ' + 'Тип телефона: ' + type.typeName}"></p>
+
+<a th:href="@{/type/edit/{id}(id=${type.getId()})}">Редактировать</a>
+<br>
+
+<form th:method="DELETE" th:action="@{/type/{id}(id=${type.getId()})}">
+    <input type="submit" value="Удалить!"/>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show street</title>
+</head>
+<body>
+
+<div th:each="street : ${streets}">
+    <a th:href="@{/street/{id}(id=${street.getId()})}"
+       th:text="${street.getId() + '. ' + street.getStreetName()}">
+    </a>
+</div>
+
+<br/>
+<hr/>
+
+<a href="/street/new">Внести новую улицу</a>
+
+</body>
+</html>

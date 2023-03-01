@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Search</title>
+</head>
+<body>
+
+<form ui-jp="parsley" th:action="@{/people/search}" th:object="${person}" method="get">
+  <div class="row m-b">
+    <div class="col-sm-6">
+      Поиск по ФИО:
+      <input id="filter" type="text" th:field="*{firstName}" class="form-control input-sm w-auto inline m-r"/>
+      <input id="filter" type="text" th:field="*{surname}" class="form-control input-sm w-auto inline m-r"/>
+      <input id="filter" type="text" th:field="*{patronymic}" class="form-control input-sm w-auto inline m-r"/>
+      <input type="submit" value="Найти"/>
+    </div>
+  </div>
+</form>
+
+<br/>
+<hr/>
+
+<!--<a href="/people/new">Создать нового абонента</a>-->
+
+</body>
+</html>

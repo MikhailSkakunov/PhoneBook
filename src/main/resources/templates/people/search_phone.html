@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search phone</title>
+</head>
+<body>
+
+<form ui-jp="parsley" th:action="@{/people/searchByPhone}" th:object="${phone}" method="get">
+    <div class="row m-b">
+        <div class="col-sm-6">
+            Поиск по номеру телефона:
+            <input id="filter" type="text" th:field="*{number}" class="form-control input-sm w-auto inline m-r"/>
+
+            <input type="submit" value="Найти"/>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

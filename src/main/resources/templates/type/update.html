@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PhoneType update</title>
+</head>
+<body>
+<form th:method="patch" th:action="@{/type/{id}(id=${type.getId()})}" th:object="${type}">
+    <input type="hidden" name="_metod" value="PATCH">
+    <label for="type">Введите тип телефона: </label>
+    <input th:type="text" th:field="*{typeName}" id="type"/>
+    <br>
+    <input type="submit" value="Обновить">
+</form>
+
+    </div>
+</div>
+
+
+</body>
+</html>

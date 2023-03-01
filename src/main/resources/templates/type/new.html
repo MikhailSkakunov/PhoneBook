@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New type</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/type/create}" th:object="${type}">
+    <label for="typeName">Введите тип телефона: </label>
+    <input th:type="text" th:field="*{typeName}" id="typeName"/>
+    <br>
+
+    <input type="submit" value="Создать!"/>
+</form>
+
+</body>
+</html>

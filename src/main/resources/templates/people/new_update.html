@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Person update</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
+<!--    <input type="hidden" name="_metod" value="PATCH">-->
+    <label for="firstName">Введите Имя: </label>
+    <input th:type="text" th:field="*{firstName}" id="firstName"/>
+    <br>
+    <label for="surname">Введите Отчество: </label>
+    <input th:type="text" th:field="*{surname}" id="surname"/>
+    <br>
+    <label for="patronymic">Введите Фамилию: </label>
+    <input th:type="text" th:field="*{patronymic}" id="patronymic"/>
+    <br>
+    <label for="city">Введите индекс и название города: </label>
+    <input th:type="text" th:field="*{address.city}" id="city"/>
+
+    <div id="MyAddress">
+        <label>Выбирите название улицы: </label>
+        <select th:field="*{address.street}">
+            <option th:each="str : ${street}"
+                    th:text="${str.streetName}"
+                    th:value="${str.id}">
+            </option>
+        </select>
+    </div>
+
+    <label for="buildingNumber">Введите номер дома: </label>
+    <input th:type="text" th:field="*{address.buildingNumber}" id="buildingNumber"/>
+    <br>
+    <br>
+    <label for="phone">Введите номер телефона: </label>
+    <br>
+    <fieldset id="phones">
+        <div th:each="phone, itemStat : *{phones}" id="phone">
+            <input th:field="*{phones[__${itemStat.index}__].number}"/>
+            <label for="phoneType">Тип телефона</label>
+            <select id="phoneType" required>
+                <option th:each="phType : ${phoneTypes}"
+                        th:text="${phType.typeName}"
+                        th:value="${phType.id}"
+                        th:selected="${phone.phoneType.id == phType.id}">
+                </option>
+            </select>
+            <button type="button" name="addPhone" th:value="${itemStat.index}">Добавить телефон!</button>
+        </div>
+    </fieldset>
+    <br>
+    <br>
+    <button type="button" name="addPhone">Добавить телефон</button>
+    <br>
+    <br>
+    <input type="submit" name="update" value="Обновить">
+
+    <script>
+        // jQuery
+        function replaceItems (html) {
+            // Replace the <fieldset id="items"> with a new one returned by server.
+            $('#phones').replaceWith($(html));
+        }
+
+        $('button[name="addPhone"]').click(function (event) {
+            event.preventDefault();
+            var data = $('form').serialize();
+            // Add parameter "addItem" to POSTed form data. Button's name and value is
+            // POSTed only when clicked. Since "event.preventDefault();" prevents from
+            // actual clicking the button, following line will add parameter to form
+            // data.
+            data += 'addPhone';
+            $.post('/edit/{id}', data, replaceItems);
+        });
+
+        $('button[name="removePhone"]').click(function (event) {
+            event.preventDefault();
+            var data = $('form').serialize();
+            // Add parameter and index of item that is going to be removed.
+            data += 'removePhone=' + $(this).val();
+            $.post('/edit/{id}', data, replaceItems);
+        });
+    </script>
+
+</form>
+</body>
+</html>

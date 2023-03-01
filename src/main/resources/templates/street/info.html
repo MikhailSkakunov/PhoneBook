@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Info street</title>
+</head>
+<body>
+
+<p th:text="${street.id + '. ' + 'Улица/пр-т/пр-д: ' + street.getStreetName()}"></p>
+
+<a th:href="@{/street/edit/{id}(id=${street.getId()})}">Редактировать</a>
+
+<form th:method="DELETE" th:action="@{/street/{id}(id=${street.getId()})}">
+    <br>
+    <input type="hidden" name="_metod" value="DELETE">
+    <br>
+    <input type="submit" value="Удалить!"/>
+</form>
+
+</body>
+</html>
