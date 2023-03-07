@@ -27,7 +27,7 @@ public class Address {
     @Column(name = "building_number")
     private String buildingNumber;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     @ToString.Exclude
     private Person owner;

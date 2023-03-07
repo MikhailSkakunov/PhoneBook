@@ -5,8 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.sunrise.phonebook.dto.PhoneTypeDTO;
 import ru.sunrise.phonebook.models.PhoneType;
 import ru.sunrise.phonebook.service.PhoneTypeService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
@@ -19,6 +23,22 @@ public class PhoneTypeController {
     public String showAll(Model model) {
         model.addAttribute("types", phoneTypeService.findAll());
         return "/type/show";
+    }
+
+    @ResponseBody
+    @GetMapping("/list")
+    public List<PhoneTypeDTO> listAll() {
+        return phoneTypeService.findAll().stream().map(
+                (e) -> new PhoneTypeDTO(e.getId(), e.getTypeName())
+        ).collect(Collectors.toList());
+    }
+
+    @ResponseBody
+    @GetMapping("/map")
+    public List<PhoneTypeDTO> mapAll() {
+        return phoneTypeService.findAll().stream().map(
+                (e) -> new PhoneTypeDTO(e.getId(), e.getTypeName())
+        ).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")

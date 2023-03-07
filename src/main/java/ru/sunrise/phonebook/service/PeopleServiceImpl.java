@@ -11,7 +11,6 @@ import ru.sunrise.phonebook.util.NameFieldsEmptyException;
 import ru.sunrise.phonebook.util.PeopleNotFoundException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +18,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class PeopleServiceImpl implements PeopleService {
     private final PeopleRepository peopleRepository;
-
     private final PhoneRepository phoneRepository;
 
     @Autowired
@@ -50,22 +48,12 @@ public class PeopleServiceImpl implements PeopleService {
                 || (person.getAddress().getBuildingNumber()).isEmpty()
                 || (person.getAddress().getCity()).isEmpty()) {
             throw new NameFieldsEmptyException();
-
-//        } else if(!person.getPhones().isEmpty()) {
-//            for (Phone phone : person.getPhones()) {
-//                (phoneRepository.findPhoneByNumber(phone.getNumber())).equals(phone.getNumber());
-//            } throw new PhoneNumberAlreadyExist();
-//
-//        } else if(!person.getPhones().isEmpty()) {
-//                phoneRepository.existsByNumber(person.getPhones().getNumber());
-//            }
-//        throw new PhoneNumberAlreadyExist();
-
         } else {
             for (Phone phone : person.getPhones()) {
                 phone.setOwner(person);
             }
             person.getAddress().setOwner(person);
+            person.getAddress().getStreet().setId(person.getAddress().getStreet().getId());
             peopleRepository.save(person);
         }
     }
@@ -74,8 +62,24 @@ public class PeopleServiceImpl implements PeopleService {
     @Transactional
     public void update(int id, Person person) {
 
-        Person personUpdate = peopleRepository.findById(id)
-                .orElseThrow(PeopleNotFoundException::new);
+        Person personUpdate = peopleRepository.findById(id).orElseThrow(PeopleNotFoundException::new);
+
+        ArrayList<Phone> phones = (ArrayList<Phone>) person.getPhones();
+        List<Phone> phonesUpdate = new ArrayList<>(personUpdate.getPhones());
+
+            for (int i = 0; i < phones.size(); i++) {
+                if (phones.get(i).getNumber().isEmpty()) {
+                    phones.remove(phones.get(i));
+                }
+            }
+
+        for (Phone ph : phonesUpdate) {
+            for (Phone p : phones)  {
+                if (!ph.getNumber().equals(p.getNumber())) {
+                    phoneRepository.deleteById(ph.getId());
+                }
+            }
+        }
 
         personUpdate.setFirstName(person.getFirstName());
         personUpdate.setSurname(person.getSurname());
@@ -83,36 +87,73 @@ public class PeopleServiceImpl implements PeopleService {
         personUpdate.getAddress().setCity(person.getAddress().getCity());
         personUpdate.getAddress().setBuildingNumber(person.getAddress().getBuildingNumber());
         personUpdate.getAddress().setStreet(person.getAddress().getStreet());
-        personUpdate.getAddress().setOwner(personUpdate);
+        person.getAddress().setOwner(personUpdate);
 
-        peopleRepository.save(personUpdate); //здесь я возвращаю чела по id сечу из формы все изменения ФИО и адреса и сохраняю. Все ОК
 
-        ArrayList<Phone> phones = (ArrayList<Phone>) person.getPhones();
 
-        List<Phone> phDelete = personUpdate.getPhones();
-        phoneRepository.deleteAll(phDelete);
-
-        List<Phone> phUpdate = new ArrayList<>(phones.size());
-        for (int i = 0; i < phones.size(); i++) {
-            phUpdate.add(new Phone());
+        for (Phone ph : phones) {
+            ph.setOwner(personUpdate);
         }
 
-        Collections.copy(phUpdate, phones);
+        for (Phone phone : phonesUpdate) {
+            phones.removeIf(p -> phone.getNumber().equals(p.getNumber()));
+        }
+        phones.removeIf(p -> p.getNumber().isEmpty());
 
-            for (Phone p:phUpdate) {
-                p.setOwner(personUpdate);
-                System.out.println(p);
-            }
-            phoneRepository.saveAll(phUpdate);
+        phoneRepository.saveAll(phones);
+
+        peopleRepository.save(personUpdate);
     }
 
     @Override
     @Transactional
     public void deleteById(int id) {
-//        Address address = peopleRepository.findById(id).get().getAddress();
-//        address.setOwner(null);
-//        address.setStreet(null);
-//        address.setBuildingNumber(null);
         peopleRepository.deleteById(id);
     }
+//    @Override
+//    @Transactional
+//    public void phoneUpdateSizeTrue(int id, Person person) {
+//        Person personUpdate = peopleRepository.findById(id)
+//                .orElseThrow(PeopleNotFoundException::new);
+//        ArrayList<Phone> phones = (ArrayList<Phone>) person.getPhones();
+//        List<Phone> phonesUpdate = new ArrayList<>(personUpdate.getPhones());
+//
+//        ArrayList<Phone> newPones = new ArrayList<>();
+//        for (Phone phone : phonesUpdate) {
+//            for (int j = 0; j < phones.size(); j++) {
+//                if (!(phone.getNumber()).equals(phones.get(j).getNumber())) {
+//                    newPones.add(phone);
+//                }
+//            }
+//            phoneRepository.deleteAll(phonesUpdate);
+//            phones.clear();
+//            phoneRepository.saveAll(newPones);
+//        }
+//    }
+//
+//    @Override
+//    @Transactional
+//    public void phoneUpdateSizeFalse(int id, Person person) {
+//        Person personUpdate = peopleRepository.findById(id)
+//                .orElseThrow(PeopleNotFoundException::new);
+//        ArrayList<Phone> phones = (ArrayList<Phone>) person.getPhones();
+//        List<Phone> phonesUpdate = new ArrayList<>(personUpdate.getPhones());
+//        ArrayList<Phone> newPones = new ArrayList<>();
+//
+//        for (Phone phone : phonesUpdate) {
+//            for (int j = 0; j < phones.size(); j++) {
+//                if ((phone.getNumber().equals(phones.get(j).getNumber()))) {
+//                    phones.remove(phones.get(j));
+//                }
+//            }
+//            newPones.addAll(phones);
+//            newPones.addAll(phonesUpdate);
+//            for (Phone p : newPones) {
+//                if (p.getOwner() == null) {
+//                p.setOwner(personUpdate);
+//                }
+//            }
+//            phoneRepository.saveAll(newPones);
+//        }
+//    }
 }

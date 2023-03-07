@@ -37,7 +37,12 @@
     <div class="myPhones">
         <label for="phone">Введите номер телефона: </label>
         <div th:each="phone, itemStat : *{phones}" id="phone">
+<!--            <input type="hidden" id="postId" name="postId" value="34657" />-->
+<!--            <input id="phones0.number" name="phones[0].number" value="555555">-->
             <input th:field="*{phones[__${itemStat.index}__].number}"/>
+            <input type="hidden" th:field="*{phones[__${itemStat.index}__].id}"/>
+            <input type="hidden" th:field="*{phones[__${itemStat.index}__].phoneType.id}"/>
+            <input type="hidden" th:field="*{phones[__${itemStat.index}__].phoneType.typeName}"/>
             <label for="phoneType">Тип телефона</label>
             <select id="phoneType" required>
                 <option th:each="phType : ${phoneTypes}"
@@ -49,48 +54,36 @@
         </div>
     </div>
 
-    <div class="myPhones1">
-        <label for="phone">Введите номер телефона: </label>
-        <div th:each="phone, itemStat : *{phones}" id="phone">
-            <input th:field="*{phones[__${itemStat.index}__].number}"/>
-            <label for="phoneType">Тип телефона</label>
-            <select id="phoneType" required>
-                <option th:each="phType : ${phoneTypes}"
-                        th:text="${phType.typeName}"
-                        th:value="${phType.id}"
-                        th:selected="${phone.phoneType.id == phType.id}">
-                </option>
-            </select>
-        </div>
-    </div>
-
-    <input name="phones[0].number" type="text"/>
-    <label for="phoneType">Тип телефона</label>
-    <select id="phoneType" name="phones[0].phoneType" required>
-        <option th:each="phType : ${phoneTypes}"
-                th:text="${phType.typeName}"
-                th:value="${phType.id}"
-                th:selected="${phType.id == phType.id}"></option>
-    </select>
+    <div id="phones-container"></div>
     <br>
-
-        <input name="phones[1].number" type="text"/>
-        <label for="phoneType">Тип телефона</label>
-        <select id="phoneType" name="phones[1].phoneType" required>
-            <option th:each="phType : ${phoneTypes}"
-                    th:text="${phType.typeName}"
-                    th:value="${phType.id}"
-                    th:selected="${phType.id == phType.id}"></option>
-        </select>
+    <input type="button" value="Добавить телефон" id="add_phone"/>
     <br>
+    <input type="button" value="Удалить телефон" id="delete_phone"/>
     <br>
-
-
-    <button type="button" name="add_phone">Добавить телефон</button>
-    <br>
-
     <input type="submit" name="update" value="Обновить">
 </form>
+<script>
+    $(document).ready(()=>{
+        var types = [];
+        $.get("/type/map", (data, status) => {
+            types = data;
+        });
+        $("#add_phone").click(()=> {
+            let childrenCount = $("#phones-container div").length
+            let index = childrenCount === 0 ? 0 : childrenCount;
+            console.log(types);
+            console.log(index);
+            let phoneTag = `<div>
+                    <input name="phones[${index + 1}].number" type="text"/>
+                    <label for="phoneType">Тип телефона</label>
+                    <select id="phoneType" name="phones[${index + 1}].phoneType" required>
+                        ${types.map((e,idx)=> `<option key=${idx} value=${e.id}>${e.typeName}</option>`)}
+                    </select>
+                </div>`;
 
+            $("#phones-container").append(phoneTag);
+        });
+    });
+</script>
 </body>
 </html>

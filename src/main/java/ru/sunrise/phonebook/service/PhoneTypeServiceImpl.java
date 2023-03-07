@@ -30,10 +30,16 @@ public class PhoneTypeServiceImpl implements PhoneTypeService {
 
     @Override
     @Transactional
-    public void save(PhoneType phoneType) {
-        if (phoneTypeRepository.existsByTypeName(phoneType.getTypeName())) {
-            phoneTypeRepository.save(phoneType);
-        } else throw new PhoneTypeAlreadyExistException();
+    public PhoneType update(PhoneType phoneType) {
+        return phoneTypeRepository.save(phoneType);
+    }
+
+    @Override
+    @Transactional
+    public PhoneType save(PhoneType phoneType) {
+        if (phoneTypeRepository.existsByTypeName(phoneType.getTypeName()))
+            throw new PhoneTypeAlreadyExistException();
+        return phoneTypeRepository.save(phoneType);
     }
 
     @Override
@@ -42,7 +48,7 @@ public class PhoneTypeServiceImpl implements PhoneTypeService {
         if (phoneTypeRepository.existsByTypeName(phoneType.getTypeName())) {
             phoneTypeRepository.save(phoneType);
         } else throw new PhoneTypeAlreadyExistException();
-}
+    }
 
     @Override
     @Transactional

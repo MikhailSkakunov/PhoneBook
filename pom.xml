@@ -18,6 +18,13 @@
         <changelog-file>src/main/resources/db/changelog/changelog.sql</changelog-file>
     </properties>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -51,10 +58,11 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-        </dependency>
+
+        <!--        <dependency>-->
+<!--            <groupId>org.liquibase</groupId>-->
+<!--            <artifactId>liquibase-core</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -71,17 +79,18 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <configuration>
-                    <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost:5432/phonebook_db</url>
-                    <username>Mike</username>
-                    <password />
-                    <outputChangeLogFile>src/main/resources/db/changelog/changelog_master.xml</outputChangeLogFile>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.liquibase</groupId>-->
+<!--                <artifactId>liquibase-maven-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <propertyFile>src/main/resources/liquibase-maven-plugin.properties</propertyFile>-->
+<!--                    <driver>org.postgresql.Driver</driver>-->
+<!--                    <url>jdbc:postgresql://localhost:5432/phonebook_db</url>-->
+<!--                    <username>Mike</username>-->
+<!--                    <password />-->
+<!--                    <outputChangeLogFile>target/classes/db/changelog/changelog_master.xml</outputChangeLogFile>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 

@@ -58,32 +58,26 @@
     <br>
     <input type="submit" name="update" value="Обновить">
 
-    <script>
-        // jQuery
-        function replaceItems (html) {
-            // Replace the <fieldset id="items"> with a new one returned by server.
-            $('#phones').replaceWith($(html));
-        }
 
-        $('button[name="addPhone"]').click(function (event) {
-            event.preventDefault();
-            var data = $('form').serialize();
-            // Add parameter "addItem" to POSTed form data. Button's name and value is
-            // POSTed only when clicked. Since "event.preventDefault();" prevents from
-            // actual clicking the button, following line will add parameter to form
-            // data.
-            data += 'addPhone';
-            $.post('/edit/{id}', data, replaceItems);
-        });
 
-        $('button[name="removePhone"]').click(function (event) {
-            event.preventDefault();
-            var data = $('form').serialize();
-            // Add parameter and index of item that is going to be removed.
-            data += 'removePhone=' + $(this).val();
-            $.post('/edit/{id}', data, replaceItems);
-        });
-    </script>
+    <div class="myPhones">
+        <label for="phone">Введите номер телефона: </label>
+        <div th:each="phone, itemStat : *{phones}" id="phone">
+            <input th:field="*{phones[__${itemStat.index}__].number}"/>
+            <label for="phoneType">Тип телефона</label>
+            <select id="phoneType" required>
+                <option th:each="phType : ${phoneTypes}"
+                        th:text="${phType.typeName}"
+                        th:value="${phType.id}"
+                        th:selected="${phone.phoneType.id == phType.id}">
+                </option>
+            </select>
+        </div>
+    </div>
+
+
+
+
 
 </form>
 </body>

@@ -24,18 +24,16 @@
     <div id="MyAddress">
         <label>Выбирите название улицы: </label>
         <select th:field="*{address.street}">
-                <option th:each="str : ${street}"
-                        th:text="${str.streetName}"
-                        th:value="${str.id}">
-                </option>
-            </select>
+            <option th:each="str : ${street}"
+                    th:text="${str.streetName}"
+                    th:value="${str.id}">
+            </option>
+        </select>
     </div>
 
     <label for="buildingNumber">Введите номер дома: </label>
     <input th:type="text" th:field="*{address.buildingNumber}" id="buildingNumber"/>
     <br>
-
-
     <div class="myPhones">
         <label for="phone">Введите номер телефона: </label>
         <div th:each="phone, itemStat : *{phones}" id="phone">
@@ -50,34 +48,34 @@
             </select>
         </div>
     </div>
-
-    <input name="phones[0].number" type="text"/>
-    <label for="phoneType">Тип телефона</label>
-    <select id="phoneType" name="phones[0].phoneType" required>
-        <option th:each="phType : ${phoneTypes}"
-                th:text="${phType.typeName}"
-                th:value="${phType.id}"
-                th:selected="${phType.id == 1}"></option>
-    </select>
+    <div id="phones-container"></div>
     <br>
-
-
-        <input name="phones[1].number" type="text"/>
-    <label for="phoneType">Тип телефона</label>
-    <select id="phoneType" name="phones[1].phoneType" required>
-        <option th:each="phType : ${phoneTypes}"
-                th:text="${phType.typeName}"
-                th:value="${phType.id}"
-                th:selected="${phType.id == 1}"></option>
-    </select>
-    <br>
-    <br>
-
-    <input type="button" value="Добавить телефон" id="phone"/>
-    <br>
+    <input type="button" value="Добавить телефон" id="add_phone"/>
     <br>
     <input type="submit" value="Создать!"/>
 </form>
+<script>
+    $(document).ready(()=>{
+        var types = [];
+        $.get("/type/list", (data, status) => {
+            types = data;
+        });
+        $("#add_phone").click(()=> {
+            let childrenCount = $("#phones-container div").length
+            let index = childrenCount === 0 ? 0 : childrenCount;
+            console.log(types);
+            console.log(index);
+            let phoneTag = `<div>
+                    <input name="phones[${index}].number" type="text"/>
+                    <label for="phoneType">Тип телефона</label>
+                    <select id="phoneType" name="phones[${index}].phoneType" required>
+                        ${types.map((e,idx)=> `<option key=${idx} value=${e.id}>${e.typeName}</option>`)}
+                    </select>
+                </div>`;
 
+            $("#phones-container").append(phoneTag);
+        });
+    });
+</script>
 </body>
 </html>

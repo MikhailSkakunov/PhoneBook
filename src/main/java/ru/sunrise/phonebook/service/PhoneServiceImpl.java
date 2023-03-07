@@ -48,4 +48,10 @@ public class PhoneServiceImpl implements PhoneService {
     public void delete(Phone phones) {
 
     }
+
+    @Override
+    @Transactional
+    public void deleteAll(List<Phone> phones) {
+        phoneRepository.deleteAll(phones);
+    }
 }

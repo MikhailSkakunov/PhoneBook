@@ -17,14 +17,14 @@ public class Phone {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "number")
+    @Column(name = "number", nullable = false)
     private String number;
 
     @ManyToOne
-    @JoinColumn(name = "type_id", referencedColumnName = "id")
+    @JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false)
     private PhoneType phoneType;
 
-    @ManyToOne
-    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
     private Person owner;
 }
