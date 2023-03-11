@@ -1,51 +1,56 @@
 package ru.sunrise.phonebook.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.sunrise.phonebook.dto.PhoneTypeDTO;
+import ru.sunrise.phonebook.mapstructmapper.MapStructMapper;
 import ru.sunrise.phonebook.models.PhoneType;
 import ru.sunrise.phonebook.service.PhoneTypeService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/type")
 public class PhoneTypeApiController {
     private final PhoneTypeService service;
+    private final MapStructMapper mapStructMapper;
+
+    @Autowired
+    public PhoneTypeApiController(PhoneTypeService service, MapStructMapper mapStructMapper) {
+        this.service = service;
+        this.mapStructMapper = mapStructMapper;
+    }
 
     @GetMapping
     public List<PhoneTypeDTO> listAll() {
-        return service.findAll().stream().map(
-                (e) -> new PhoneTypeDTO(e.getId(), e.getTypeName())
-        ).collect(Collectors.toList());
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public PhoneTypeDTO getById(@PathVariable("id") int id) {
-        PhoneType entity = service.findById(id);
-        return new PhoneTypeDTO(entity.getId(), entity.getTypeName());
+        return service.findById(id);
     }
 
     @PostMapping
     public PhoneTypeDTO create(@RequestBody PhoneTypeDTO dto) {
-        PhoneType entity = new PhoneType();
 
-        entity.setTypeName(dto.getTypeName());
-        entity = service.save(entity);
+        PhoneType phoneType = mapStructMapper.phoneTypeDtoToPhoneType(dto);
+        service.save(phoneType);
 
-        return new PhoneTypeDTO(entity.getId(),entity.getTypeName());
+        return mapStructMapper.phoneTypeToPhoneTypeDTO(phoneType);
     }
 
     @PutMapping("/{id}")
     public PhoneTypeDTO update(@PathVariable("id") int id, @RequestBody PhoneTypeDTO dto) {
-        PhoneType entity = service.findById(id);
+         PhoneTypeDTO phoneTypeDTO = service.findById(id);
+         PhoneType phoneType = mapStructMapper.phoneTypeDtoToPhoneType(phoneTypeDTO);
 
-        entity.setTypeName(dto.getTypeName());
-        entity = service.update(entity);
+         phoneType.setTypeName(phoneTypeDTO.getTypeName());
+         service.update(phoneType);
 
-        return new PhoneTypeDTO(entity.getId(), entity.getTypeName());
+        return phoneTypeDTO;
     }
 
     @DeleteMapping("/{id}")

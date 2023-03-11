@@ -6,12 +6,12 @@
 </head>
 <body>
 
-<div th:each="person : ${people}">
-    <a th:href="@{/people/{id}(id=${person.getId()})}"
-       th:text="${person.getId() + '. '
-       + person.getFirstName() + ' '
-       + person.getSurname() + ' '
-       + person.getPatronymic()}"
+<div th:each="personDTO : ${people}">
+    <a th:href="@{/people/{id}(id=${personDTO.getId()})}"
+       th:text="${personDTO.getId() + '. '
+       + personDTO.getFirstName() + ' '
+       + personDTO.getSurname() + ' '
+       + personDTO.getPatronymic()}"
     ></a>
 </div>
 

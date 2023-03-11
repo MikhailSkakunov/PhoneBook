@@ -6,17 +6,17 @@
 </head>
 <body>
 <p th:text="${'ФИО: ' + person.firstName + ' ' + person.surname + ' ' + person.patronymic}"></p>
-<p th:text="${'Адрес: ' + person.getAddress().getCity() + ', '
-+ person.getAddress().getStreet().getStreetName() + ', '
-            + person.getAddress().getBuildingNumber()}"></p>
-    <div th:each="phone : ${person.getPhones()}">
-        <p th:text="${'Номер телефона: ' + phone.number + ' - ' + phone.getPhoneType().typeName}"></p>
+<p th:text="${'Адрес: ' + person.AddressDTO.city + ', '
++ person.addressDTO.streetDTO.streetName + ', '
+            + person.AddressDTO.buildingNumber}"></p>
+    <div th:each="phoneDTO : ${person.phonesDTO}">
+        <p th:text="${'Номер телефона: ' + phoneDTO.number + ' - ' + phoneDTO.phoneTypeDTO.typeName}"></p>
     </div>
 </div>
 <br>
-<a th:href="@{/people/edit/{id}(id=${person.getId()})}">Редактировать</a>
+<a th:href="@{/people/edit/{id}(id=${person.id})}">Редактировать</a>
 <br>
-<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.id})}">
     <br>
     <input type="hidden" name="_metod" value="DELETE">
     <br>

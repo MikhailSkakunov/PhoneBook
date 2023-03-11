@@ -3,6 +3,9 @@ package ru.sunrise.phonebook.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sunrise.phonebook.dto.PersonDTO;
+import ru.sunrise.phonebook.dto.PersonMapper;
+import ru.sunrise.phonebook.mapstructmapper.MapStructMapper;
 import ru.sunrise.phonebook.models.Person;
 import ru.sunrise.phonebook.models.Phone;
 import ru.sunrise.phonebook.repository.PeopleRepository;
@@ -19,15 +22,19 @@ import java.util.Optional;
 public class PeopleServiceImpl implements PeopleService {
     private final PeopleRepository peopleRepository;
     private final PhoneRepository phoneRepository;
+    private final MapStructMapper mapStructMapper;
+    private final PersonMapper personMapper;
 
     @Autowired
-    public PeopleServiceImpl(PeopleRepository personRepository, PhoneRepository phoneRepository) {
+    public PeopleServiceImpl(PeopleRepository personRepository, PhoneRepository phoneRepository, MapStructMapper mapStructMapper, PersonMapper personMapper) {
         this.peopleRepository = personRepository;
         this.phoneRepository = phoneRepository;
+        this.mapStructMapper = mapStructMapper;
+        this.personMapper = personMapper;
     }
 
-    public List<Person> findAll() {
-        return peopleRepository.findAll();
+    public List<PersonDTO> findAll() {
+        return mapStructMapper.personsToListPersonsAllDto(peopleRepository.findAll());
     }
 
     @Override
@@ -35,8 +42,12 @@ public class PeopleServiceImpl implements PeopleService {
         return peopleRepository.findByFirstNameAndSurnameAndPatronymic(firstName, surname, patronymic);
     }
 
-    public Person findById(int id) {
-            return peopleRepository.findById(id).orElseThrow(PeopleNotFoundException::new);
+    public PersonDTO findById(int id) {
+        final Person person = peopleRepository.findById(id).orElseThrow(PeopleNotFoundException::new);
+        final PersonDTO personDTO = personMapper.toPersonDTO(person);
+
+        System.out.println("personDTO = " + personDTO);
+        return personDTO;
     }
 
     @Override

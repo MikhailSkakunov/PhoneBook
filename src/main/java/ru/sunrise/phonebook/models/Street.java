@@ -1,17 +1,11 @@
 package ru.sunrise.phonebook.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @ToString
 @Entity
 @Table(name = "streets")
@@ -23,10 +17,42 @@ public class Street {
     private int id;
 
     @Column(name = "street_name", nullable = false)
-    @NotEmpty
     private String streetName;
 
-    @OneToMany(mappedBy = "street", orphanRemoval = true)
+    @OneToMany(mappedBy = "street", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Address> addresses = new ArrayList<>();
+
+    public Street() {
+    }
+
+    public Street(int id, String streetName, List<Address> addresses) {
+        this.id = id;
+        this.streetName = streetName;
+        this.addresses = addresses;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getStreetName() {
+        return streetName;
+    }
+
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
 }

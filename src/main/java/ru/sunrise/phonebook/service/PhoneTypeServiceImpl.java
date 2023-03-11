@@ -1,8 +1,10 @@
 package ru.sunrise.phonebook.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sunrise.phonebook.dto.PhoneTypeDTO;
+import ru.sunrise.phonebook.mapstructmapper.MapStructMapper;
 import ru.sunrise.phonebook.models.Phone;
 import ru.sunrise.phonebook.models.PhoneType;
 import ru.sunrise.phonebook.repository.PhoneTypeRepository;
@@ -11,21 +13,33 @@ import ru.sunrise.phonebook.util.PhoneTypeNotFoundException;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class PhoneTypeServiceImpl implements PhoneTypeService {
 
     private final PhoneTypeRepository phoneTypeRepository;
+    private final MapStructMapper mapStructMapper;
+
+    @Autowired
+    public PhoneTypeServiceImpl(PhoneTypeRepository phoneTypeRepository, MapStructMapper mapStructMapper) {
+        this.phoneTypeRepository = phoneTypeRepository;
+        this.mapStructMapper = mapStructMapper;
+    }
+
 
     @Override
-    public List<PhoneType> findAll() {
-        return phoneTypeRepository.findAll();
+    public List<PhoneTypeDTO> findAll() {
+        List<PhoneType> phoneTypes = phoneTypeRepository.findAll();
+        List<PhoneTypeDTO> phoneTypeDTOS = mapStructMapper.phoneTypesToListAllDto(phoneTypes);
+
+        return phoneTypeDTOS;
     }
 
     @Override
-    public PhoneType findById(int id) {
-        return phoneTypeRepository.findById(id).orElseThrow(PhoneTypeNotFoundException::new);
+    public PhoneTypeDTO findById(int id) {
+        PhoneType phoneType = phoneTypeRepository.findById(id).orElseThrow(PhoneTypeNotFoundException::new);
+        PhoneTypeDTO phoneTypeDTO = mapStructMapper.phoneTypeToPhoneTypeDTO(phoneType);
+        return phoneTypeDTO;
     }
 
     @Override
@@ -61,4 +75,6 @@ public class PhoneTypeServiceImpl implements PhoneTypeService {
         }
         phoneTypeRepository.deleteById(id);
     }
+
+
 }

@@ -12,11 +12,11 @@ import java.util.Optional;
 
 public interface PeopleService {
 
-    List<Person> findAll();
+    List<PersonDTO> findAll();
 
     Optional<List<Person>> findByFirstNameAndSurnameAndPatronymic(String firstName, String surname, String patronymic);
 
-    Person findById(int id);
+    PersonDTO findById(int id);
 
     void save(Person person);
 

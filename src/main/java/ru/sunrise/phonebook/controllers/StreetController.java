@@ -1,6 +1,8 @@
 package ru.sunrise.phonebook.controllers;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -8,11 +10,16 @@ import ru.sunrise.phonebook.models.Street;
 import ru.sunrise.phonebook.service.StreetService;
 
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Controller
 @RequestMapping("/street")
 public class StreetController {
 
-    private final StreetService streetService;
+    private StreetService streetService;
+    @Autowired
+    public StreetController(StreetService streetService) {
+        this.streetService = streetService;
+    }
 
     @GetMapping
     public String showAll(Model model) {

@@ -1,6 +1,6 @@
 package ru.sunrise.phonebook.controllers;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,14 +10,17 @@ import ru.sunrise.phonebook.models.PhoneType;
 import ru.sunrise.phonebook.service.PhoneTypeService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Controller
 @RequestMapping("/type")
 public class PhoneTypeController {
 
     private final PhoneTypeService phoneTypeService;
+
+    @Autowired
+    public PhoneTypeController(PhoneTypeService phoneTypeService) {
+        this.phoneTypeService = phoneTypeService;
+    }
 
     @GetMapping
     public String showAll(Model model) {
@@ -28,17 +31,13 @@ public class PhoneTypeController {
     @ResponseBody
     @GetMapping("/list")
     public List<PhoneTypeDTO> listAll() {
-        return phoneTypeService.findAll().stream().map(
-                (e) -> new PhoneTypeDTO(e.getId(), e.getTypeName())
-        ).collect(Collectors.toList());
+        return phoneTypeService.findAll();
     }
 
     @ResponseBody
     @GetMapping("/map")
     public List<PhoneTypeDTO> mapAll() {
-        return phoneTypeService.findAll().stream().map(
-                (e) -> new PhoneTypeDTO(e.getId(), e.getTypeName())
-        ).collect(Collectors.toList());
+        return phoneTypeService.findAll();
     }
 
     @GetMapping("/{id}")

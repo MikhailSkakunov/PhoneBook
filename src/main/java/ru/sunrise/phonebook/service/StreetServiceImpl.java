@@ -1,8 +1,10 @@
 package ru.sunrise.phonebook.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sunrise.phonebook.dto.StreetDTO;
+import ru.sunrise.phonebook.mapstructmapper.MapStructMapper;
 import ru.sunrise.phonebook.models.Address;
 import ru.sunrise.phonebook.models.Street;
 import ru.sunrise.phonebook.repository.StreetRepository;
@@ -11,22 +13,33 @@ import ru.sunrise.phonebook.util.StreetNotFoundException;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class StreetServiceImpl implements StreetService {
 
     private final StreetRepository streetRepository;
 
+    private final MapStructMapper mapStructMapper;
 
-    @Override
-    public List<Street> findAll() {
-        return streetRepository.findAll();
+    @Autowired
+    public StreetServiceImpl(StreetRepository streetRepository, MapStructMapper mapStructMapper) {
+        this.streetRepository = streetRepository;
+        this.mapStructMapper = mapStructMapper;
     }
 
     @Override
-    public Street findById(int id) {
-        return streetRepository.findById(id).orElseThrow(StreetNotFoundException::new);
+    public List<StreetDTO> findAll() {
+        List<Street> streets = streetRepository.findAll();
+        List<StreetDTO> streetDTOS = mapStructMapper.streetsToListAllDto(streets);
+
+        return streetDTOS;
+    }
+
+    @Override
+    public StreetDTO findById(int id) {
+        Street street = streetRepository.findById(id).orElseThrow(StreetNotFoundException::new);
+        StreetDTO streetDTO = mapStructMapper.streetToStreetDTO(street);
+        return streetDTO;
     }
 
     @Override

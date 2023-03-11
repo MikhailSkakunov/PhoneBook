@@ -16,9 +16,25 @@
     <properties>
         <java.version>17</java.version>
         <changelog-file>src/main/resources/db/changelog/changelog.sql</changelog-file>
+
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+
     </properties>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.projectlombok</groupId>-->
+<!--            <artifactId>lombok-mapstruct-binding</artifactId>-->
+<!--            <version>0.2.0</version>-->
+<!--        </dependency>-->
+
+
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
@@ -91,7 +107,55 @@
 <!--                    <outputChangeLogFile>target/classes/db/changelog/changelog_master.xml</outputChangeLogFile>-->
 <!--                </configuration>-->
 <!--            </plugin>-->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>15</source>
+                    <target>15</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+<!--    <licenses>-->
+<!--        <license>-->
+<!--            <name>The MIT License</name>-->
+<!--            <url>https://projectlombok.org/LICENSE</url>-->
+<!--            <distribution>repo</distribution>-->
+<!--        </license>-->
+<!--    </licenses>-->
+<!--    <scm>-->
+<!--        <connection>scm:git:git://github.com/rzwitserloot/lombok.git</connection>-->
+<!--        <url>http://github.com/rzwitserloot/lombok</url>-->
+<!--    </scm>-->
+<!--    <issueManagement>-->
+<!--        <system>GitHub Issues</system>-->
+<!--        <url>https://github.com/rzwitserloot/lombok/issues</url>-->
+<!--    </issueManagement>-->
+<!--    <developers>-->
+<!--        <developer>-->
+<!--            <id>rzwitserloot</id>-->
+<!--            <name>Reinier Zwitserloot</name>-->
+<!--            <email>reinier@projectlombok.org</email>-->
+<!--            <url>http://zwitserloot.com</url>-->
+<!--            <timezone>+1</timezone>-->
+<!--        </developer>-->
+<!--        <developer>-->
+<!--            <id>rspilker</id>-->
+<!--            <name>Roel Spilker</name>-->
+<!--            <email>roel@projectlombok.org</email>-->
+<!--            <timezone>+1</timezone>-->
+<!--        </developer>-->
+<!--    </developers>-->
 
 </project>

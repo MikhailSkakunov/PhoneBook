@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface PeopleRepository extends JpaRepository<Person, Integer> {
 
     Optional <List<Person>> findByFirstNameAndSurnameAndPatronymic(String firstName, String surname, String patronymic);
+    
 
 //    void phoneUpdateSizeTrue(int id, Person person);
 //

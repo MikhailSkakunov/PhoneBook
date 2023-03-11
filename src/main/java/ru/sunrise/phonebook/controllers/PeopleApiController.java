@@ -1,33 +1,48 @@
 //package ru.sunrise.phonebook.controllers;
 //
-//import lombok.RequiredArgsConstructor;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.ui.Model;
 //import org.springframework.web.bind.annotation.*;
 //import ru.sunrise.phonebook.dto.PersonDTO;
-//import ru.sunrise.phonebook.models.Person;
+//import ru.sunrise.phonebook.mapstructmapper.MapStructMapper;
 //import ru.sunrise.phonebook.service.PeopleService;
+//import ru.sunrise.phonebook.service.PhoneService;
+//import ru.sunrise.phonebook.service.PhoneTypeService;
+//import ru.sunrise.phonebook.service.StreetService;
 //
-//import java.util.List;
-//import java.util.stream.Collectors;
-//
-//@RequiredArgsConstructor
-//@RestController
-//@RequestMapping("/api/people")
+//@Controller
+//@RequestMapping("/people")
 //public class PeopleApiController {
-//    private final PeopleService service;
+//    private final PeopleService peopleService;
+//    private final PhoneService phoneService;
+//    private final PhoneTypeService phoneTypeService;
+//    private final StreetService streetService;
+//    private final MapStructMapper mapStructMapper;
+//
+//    @Autowired
+//    public PeopleApiController(PeopleService peopleService, PhoneService phoneService,
+//                               PhoneTypeService phoneTypeService, StreetService streetService,
+//                               MapStructMapper mapStructMapper) {
+//        this.peopleService = peopleService;
+//        this.phoneService = phoneService;
+//        this.phoneTypeService = phoneTypeService;
+//        this.streetService = streetService;
+//        this.mapStructMapper = mapStructMapper;
+//    }
 //
 //    @GetMapping
-//    public List<PersonDTO> listAll() {
-//        return service.findAll().stream().map(
-//                (e) -> new PersonDTO(e.getId(), e.getFirstName(), e.getSurname() , e.getPatronymic())
-//        ).collect(Collectors.toList());
+//    public String showAll(Model model) {
+//        model.addAttribute("people", peopleService.findAll());
+//        return "/people/show";
 //    }
 //
 //    @GetMapping("/{id}")
-//    public PersonDTO getById(@PathVariable("id") int id) {
-//        Person entity = service.findById(id);
-//        return new PersonDTO(entity.getId(), entity.getFirstName(), entity.getSurname(), entity.getPatronymic(), entity.getAddressDTO(), entity.getPhones());
+//    public String showById(@PathVariable("id") int id, Model model) {
+//        model.addAttribute("person", peopleService.findById(id));
+//        return "/people/info";
 //    }
-//
+
 //    @PostMapping
 //    public PersonDTO create(@RequestBody PersonDTO dto) {
 //        Person entity = new Person();
