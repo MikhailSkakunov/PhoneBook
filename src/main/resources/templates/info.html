@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Info Person</title>
+</head>
+<body>
+<p th:text="${'ФИО: ' + person.firstName + ' ' + person.surname + ' ' + person.patronymic}"></p>
+<p th:text="${'Адрес: ' + person.getAddressDTO().getCity() + ', '
++ person.getAddressDTO().getStreetDTO().getStreetName() + ', '
+            + person.getAddressDTO().getBuildingNumber()}"></p>
+    <div th:each="phone : ${person.getPhones()}">
+        <p th:text="${'Номер телефона: ' + phone.number + ' - ' + phone.phoneType.typeName}"></p>
+    </div>
+</div>
+<br>
+<a th:href="@{/people/edit/{id}(id=${person.getId()})}">Редактировать</a>
+<br>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <br>
+    <input type="hidden" name="_metod" value="DELETE">
+    <br>
+    <input type="submit" value="Удалить!"/>
+</form>
+
+</body>
+</html>
