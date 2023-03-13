@@ -1,11 +1,8 @@
 package ru.sunrise.phonebook.dto;
 
-import lombok.ToString;
-
 import java.util.List;
 
 
-@ToString
 public class PhoneTypeDTO {
 
     private int id;

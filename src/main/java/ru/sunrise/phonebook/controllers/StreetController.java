@@ -6,16 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.sunrise.phonebook.dto.StreetDTO;
 import ru.sunrise.phonebook.models.Street;
 import ru.sunrise.phonebook.service.StreetService;
 
-@RequiredArgsConstructor
-@NoArgsConstructor
 @Controller
 @RequestMapping("/street")
 public class StreetController {
 
-    private StreetService streetService;
+    private final StreetService streetService;
     @Autowired
     public StreetController(StreetService streetService) {
         this.streetService = streetService;
@@ -52,9 +51,9 @@ public class StreetController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("street") Street street,
+    public String update(@ModelAttribute("street") StreetDTO streetDTO,
                        @PathVariable("id") int id) {
-        streetService.update(id, street);
+        streetService.update(id, streetDTO);
         return "redirect:/street";
     }
 

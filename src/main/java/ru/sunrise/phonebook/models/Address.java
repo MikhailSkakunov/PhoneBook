@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-@ToString
 @Entity
 @Table(name = "addresses")
 public class Address {
@@ -26,7 +25,7 @@ public class Address {
     @ToString.Exclude
     private Person owner;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "street_id", referencedColumnName = "id")
     @ToString.Exclude
     private Street street;
@@ -80,5 +79,16 @@ public class Address {
 
     public void setStreet(Street street) {
         this.street = street;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", buildingNumber='" + buildingNumber + '\'' +
+                ", owner=" + owner +
+                ", street=" + street +
+                '}';
     }
 }

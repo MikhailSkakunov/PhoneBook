@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sunrise.phonebook.dto.PhoneTypeDTO;
+import ru.sunrise.phonebook.dto.PhoneTypeMapper;
 import ru.sunrise.phonebook.mapstructmapper.MapStructMapper;
 import ru.sunrise.phonebook.models.Phone;
 import ru.sunrise.phonebook.models.PhoneType;
@@ -19,11 +20,13 @@ public class PhoneTypeServiceImpl implements PhoneTypeService {
 
     private final PhoneTypeRepository phoneTypeRepository;
     private final MapStructMapper mapStructMapper;
+    private final PhoneTypeMapper phoneTypeMapper;
 
     @Autowired
-    public PhoneTypeServiceImpl(PhoneTypeRepository phoneTypeRepository, MapStructMapper mapStructMapper) {
+    public PhoneTypeServiceImpl(PhoneTypeRepository phoneTypeRepository, MapStructMapper mapStructMapper, PhoneTypeMapper phoneTypeMapper) {
         this.phoneTypeRepository = phoneTypeRepository;
         this.mapStructMapper = mapStructMapper;
+        this.phoneTypeMapper = phoneTypeMapper;
     }
 
 
@@ -42,24 +45,26 @@ public class PhoneTypeServiceImpl implements PhoneTypeService {
         return phoneTypeDTO;
     }
 
-    @Override
-    @Transactional
-    public PhoneType update(PhoneType phoneType) {
-        return phoneTypeRepository.save(phoneType);
-    }
+//    @Override
+//    @Transactional
+//    public PhoneType update(PhoneType phoneType) {
+//        return phoneTypeRepository.save(phoneType);
+//    }
 
     @Override
     @Transactional
-    public PhoneType save(PhoneType phoneType) {
+    public void save(PhoneType phoneType) {
         if (phoneTypeRepository.existsByTypeName(phoneType.getTypeName()))
             throw new PhoneTypeAlreadyExistException();
-        return phoneTypeRepository.save(phoneType);
+        phoneTypeRepository.save(phoneType);
     }
 
     @Override
     @Transactional
-    public void update(int id, PhoneType phoneType) {
-        if (phoneTypeRepository.existsByTypeName(phoneType.getTypeName())) {
+    public void update(int id, PhoneTypeDTO phoneTypeDTO) {
+        PhoneType phoneType = phoneTypeMapper.toPhoneType(phoneTypeDTO);
+        if (!phoneTypeRepository.existsByTypeName(phoneType.getTypeName())) {
+            phoneType.setTypeName(phoneTypeDTO.getTypeName());
             phoneTypeRepository.save(phoneType);
         } else throw new PhoneTypeAlreadyExistException();
     }

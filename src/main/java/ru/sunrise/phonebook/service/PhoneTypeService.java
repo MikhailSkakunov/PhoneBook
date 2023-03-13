@@ -7,16 +7,13 @@ import java.util.List;
 
 public interface PhoneTypeService {
 
-    PhoneType update(PhoneType phoneType);
-    PhoneType save(PhoneType phoneType);
-
-//    void save(PhoneType phoneType);
+    void save(PhoneType phoneType);
 
     List<PhoneTypeDTO> findAll();
 
     PhoneTypeDTO findById(int id);
 
-    void update(int id, PhoneType phoneType);
+    void update(int id, PhoneTypeDTO phoneType);
 
     void deleteById(int id);
 }

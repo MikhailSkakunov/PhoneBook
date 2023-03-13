@@ -6,9 +6,9 @@
 </head>
 <body>
 
-<div th:each="type : ${types}">
-    <a th:href="@{/type/{id}(id=${type.getId()})}"
-       th:text="${type.getId() + '. ' + type.typeName}">
+<div th:each="typeDTO : ${types}">
+    <a th:href="@{/type/{id}(id=${typeDTO.id})}"
+       th:text="${typeDTO.id + '. ' + typeDTO.typeName}">
     </a>
 </div>
 

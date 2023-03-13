@@ -3,13 +3,18 @@ package ru.sunrise.phonebook.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sunrise.phonebook.dto.AddressMapper;
 import ru.sunrise.phonebook.dto.PersonDTO;
 import ru.sunrise.phonebook.dto.PersonMapper;
+import ru.sunrise.phonebook.dto.PhoneDTO;
 import ru.sunrise.phonebook.mapstructmapper.MapStructMapper;
+import ru.sunrise.phonebook.models.Address;
 import ru.sunrise.phonebook.models.Person;
 import ru.sunrise.phonebook.models.Phone;
+import ru.sunrise.phonebook.repository.AddressRepository;
 import ru.sunrise.phonebook.repository.PeopleRepository;
 import ru.sunrise.phonebook.repository.PhoneRepository;
+import ru.sunrise.phonebook.util.AddressFieldsEmptyException;
 import ru.sunrise.phonebook.util.NameFieldsEmptyException;
 import ru.sunrise.phonebook.util.PeopleNotFoundException;
 
@@ -22,15 +27,19 @@ import java.util.Optional;
 public class PeopleServiceImpl implements PeopleService {
     private final PeopleRepository peopleRepository;
     private final PhoneRepository phoneRepository;
+    private final AddressRepository addressRepository;
     private final MapStructMapper mapStructMapper;
     private final PersonMapper personMapper;
+    private final AddressMapper addressMapper;
 
     @Autowired
-    public PeopleServiceImpl(PeopleRepository personRepository, PhoneRepository phoneRepository, MapStructMapper mapStructMapper, PersonMapper personMapper) {
+    public PeopleServiceImpl(PeopleRepository personRepository, PhoneRepository phoneRepository, AddressRepository addressRepository, MapStructMapper mapStructMapper, PersonMapper personMapper, AddressMapper addressMapper) {
         this.peopleRepository = personRepository;
         this.phoneRepository = phoneRepository;
+        this.addressRepository = addressRepository;
         this.mapStructMapper = mapStructMapper;
         this.personMapper = personMapper;
+        this.addressMapper = addressMapper;
     }
 
     public List<PersonDTO> findAll() {
@@ -46,26 +55,44 @@ public class PeopleServiceImpl implements PeopleService {
         final Person person = peopleRepository.findById(id).orElseThrow(PeopleNotFoundException::new);
         final PersonDTO personDTO = personMapper.toPersonDTO(person);
 
-        System.out.println("personDTO = " + personDTO);
         return personDTO;
     }
 
     @Override
-    @Transactional
     public void save(Person person) {
-        if (person.getFirstName().isEmpty() || person.getSurname().isEmpty()
-                || person.getPatronymic().isEmpty()
-                || (person.getAddress().getStreet()).getStreetName().isEmpty()
-                || (person.getAddress().getBuildingNumber()).isEmpty()
-                || (person.getAddress().getCity()).isEmpty()) {
-            throw new NameFieldsEmptyException();
-        } else {
-            for (Phone phone : person.getPhones()) {
-                phone.setOwner(person);
-            }
-            person.getAddress().setOwner(person);
-            person.getAddress().getStreet().setId(person.getAddress().getStreet().getId());
+
+    }
+
+    @Override
+    @Transactional
+    public void save(PersonDTO personDTO) {
+        Person person;
+        Address address;
+        List<Phone> phones;
+
+        if (!personDTO.getFirstName().isEmpty() || !personDTO.getSurname().isEmpty()
+                || !personDTO.getPatronymic().isEmpty()) {
+            person = personMapper.toPerson(personDTO);
             peopleRepository.save(person);
+            System.out.println(person);
+        } else throw new NameFieldsEmptyException();
+
+        if (!personDTO.getAddressDTO().getBuildingNumber().isEmpty()
+                || !personDTO.getAddressDTO().getCity().isEmpty()) {
+            address = addressMapper.toAddress(personDTO.getAddressDTO());
+            address.setOwner(person);
+            addressRepository.save(address);
+            System.out.println(address);
+        } else throw new AddressFieldsEmptyException();
+
+        if (!personDTO.getPhonesDTO().isEmpty()) {
+            List<PhoneDTO> phoneDTOS = new ArrayList<>(personDTO.getPhonesDTO());
+            phones = personMapper.phonesDTOToPhones(phoneDTOS);
+            for (Phone p : phones) {
+                p.setOwner(person);
+                phoneRepository.save(p);
+            }
+            System.out.println(phones);
         }
     }
 
@@ -121,6 +148,7 @@ public class PeopleServiceImpl implements PeopleService {
     public void deleteById(int id) {
         peopleRepository.deleteById(id);
     }
+
 //    @Override
 //    @Transactional
 //    public void phoneUpdateSizeTrue(int id, Person person) {

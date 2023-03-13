@@ -7,7 +7,6 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
 @Entity
 @Table(name = "persons")
 public class Person {
@@ -31,7 +30,7 @@ public class Person {
     @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
     private Address address = new Address();
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Phone> phones = new ArrayList<>();
 
@@ -93,5 +92,17 @@ public class Person {
 
     public void setPhones(List<Phone> phones) {
         this.phones = phones;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", surname='" + surname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", address=" + address +
+                ", phones=" + phones +
+                '}';
     }
 }

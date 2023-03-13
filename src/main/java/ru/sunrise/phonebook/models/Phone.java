@@ -3,9 +3,6 @@ package ru.sunrise.phonebook.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-
-@ToString
 @Entity
 @Table(name = "phones")
 public class Phone {
@@ -18,11 +15,11 @@ public class Phone {
     @Column(name = "number", nullable = false)
     private String number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false)
     private PhoneType phoneType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
     private Person owner;
 
@@ -66,5 +63,15 @@ public class Phone {
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public String toString() {
+        return "Phone{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", phoneType=" + phoneType +
+                ", owner=" + owner +
+                '}';
     }
 }

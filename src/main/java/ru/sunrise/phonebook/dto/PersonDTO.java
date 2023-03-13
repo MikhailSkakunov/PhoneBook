@@ -1,10 +1,10 @@
 package ru.sunrise.phonebook.dto;
 
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
-@ToString
+
 public class PersonDTO {
 
     private int id;
@@ -77,5 +77,17 @@ public class PersonDTO {
 
     public void setPhonesDTO(List<PhoneDTO> phonesDTO) {
         this.phonesDTO = phonesDTO;
+    }
+
+    @Override
+    public String toString() {
+        return "PersonDTO{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", surname='" + surname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", addressDTO=" + addressDTO +
+                ", phonesDTO=" + phonesDTO +
+                '}';
     }
 }

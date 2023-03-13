@@ -10,18 +10,18 @@ public class AddressDTO {
 
     private String buildingNumber;
 
-    private Integer ownerId;
+    private PersonDTO ownerDTO;
 
     private StreetDTO streetDTO;
 
     public AddressDTO() {
     }
 
-    public AddressDTO(int id, String city, String buildingNumber, Integer ownerId, StreetDTO streetDTO) {
+    public AddressDTO(int id, String city, String buildingNumber, PersonDTO ownerDTO, StreetDTO streetDTO) {
         this.id = id;
         this.city = city;
         this.buildingNumber = buildingNumber;
-        this.ownerId = ownerId;
+        this.ownerDTO = ownerDTO;
         this.streetDTO = streetDTO;
     }
 
@@ -49,12 +49,12 @@ public class AddressDTO {
         this.buildingNumber = buildingNumber;
     }
 
-    public Integer getOwnerId() {
-        return ownerId;
+    public PersonDTO getOwnerDTO() {
+        return ownerDTO;
     }
 
-    public void setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
+    public void setOwnerDTO(PersonDTO ownerDTO) {
+        this.ownerDTO = ownerDTO;
     }
 
     public StreetDTO getStreetDTO() {

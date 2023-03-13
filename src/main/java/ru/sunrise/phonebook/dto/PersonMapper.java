@@ -8,10 +8,17 @@ import ru.sunrise.phonebook.models.Phone;
 
 import java.util.List;
 //@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-@Mapper(componentModel = "spring", uses = {AddressMapper.class, PhoneMapper.class, StreetMapper.class})
+@Mapper(componentModel = "spring", uses = {AddressMapper.class, PhoneMapper.class,
+                                           StreetMapper.class, PhoneTypeMapper.class})
 public interface PersonMapper {
 
-//    PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);
+
+    //    PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);
+
+
+    @Mappings ({
+        @Mapping(target = "address", source = "addressDTO"),
+        @Mapping(target = "phones", source = "phonesDTO")})
     Person toPerson(PersonDTO personDTO);
 
     @InheritInverseConfiguration
@@ -39,7 +46,10 @@ public interface PersonMapper {
 //    @Mapping(source = "number", target = "number")
 //    @Mapping(target = "phoneTypeId", source = "phoneType.id")
 //    @Mapping(target = "ownerId", source = "owner.id")
-    PhoneDTO toPhoneDTO(Phone source);
+//    PhoneDTO toPhoneDTO(Phone source);
     List<PhoneDTO> phonesToPhonesDTO(List<Phone> phones);
+
+    @InheritInverseConfiguration
+    List<Phone> phonesDTOToPhones(List<PhoneDTO> phonesDTO);
 
 }

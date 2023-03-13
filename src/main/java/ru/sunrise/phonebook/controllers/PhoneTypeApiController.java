@@ -42,17 +42,6 @@ public class PhoneTypeApiController {
         return mapStructMapper.phoneTypeToPhoneTypeDTO(phoneType);
     }
 
-    @PutMapping("/{id}")
-    public PhoneTypeDTO update(@PathVariable("id") int id, @RequestBody PhoneTypeDTO dto) {
-         PhoneTypeDTO phoneTypeDTO = service.findById(id);
-         PhoneType phoneType = mapStructMapper.phoneTypeDtoToPhoneType(phoneTypeDTO);
-
-         phoneType.setTypeName(phoneTypeDTO.getTypeName());
-         service.update(phoneType);
-
-        return phoneTypeDTO;
-    }
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") int id) {
         service.deleteById(id);

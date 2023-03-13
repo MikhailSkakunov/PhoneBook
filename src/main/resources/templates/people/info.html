@@ -8,7 +8,7 @@
 <p th:text="${'ФИО: ' + person.firstName + ' ' + person.surname + ' ' + person.patronymic}"></p>
 <p th:text="${'Адрес: ' + person.AddressDTO.city + ', '
 + person.addressDTO.streetDTO.streetName + ', '
-            + person.AddressDTO.buildingNumber}"></p>
+            + person.addressDTO.buildingNumber}"></p>
     <div th:each="phoneDTO : ${person.phonesDTO}">
         <p th:text="${'Номер телефона: ' + phoneDTO.number + ' - ' + phoneDTO.phoneTypeDTO.typeName}"></p>
     </div>

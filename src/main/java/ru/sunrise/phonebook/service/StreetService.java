@@ -17,7 +17,7 @@ public interface StreetService {
 
     StreetDTO findById(int id);
 
-    void update(int id, Street street);
+    void update(int id, StreetDTO streetDTO);
 
     void deleteById(int id);
 }

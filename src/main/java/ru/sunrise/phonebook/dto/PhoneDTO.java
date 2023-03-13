@@ -4,7 +4,6 @@ import lombok.ToString;
 
 
 
-@ToString
 public class PhoneDTO {
 
     private int id;

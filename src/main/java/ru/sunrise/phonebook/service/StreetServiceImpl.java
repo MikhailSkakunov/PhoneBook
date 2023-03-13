@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sunrise.phonebook.dto.StreetDTO;
+import ru.sunrise.phonebook.dto.StreetMapper;
 import ru.sunrise.phonebook.mapstructmapper.MapStructMapper;
 import ru.sunrise.phonebook.models.Address;
 import ru.sunrise.phonebook.models.Street;
@@ -18,13 +19,15 @@ import java.util.List;
 public class StreetServiceImpl implements StreetService {
 
     private final StreetRepository streetRepository;
-
     private final MapStructMapper mapStructMapper;
 
+    private final StreetMapper streetMapper;
+
     @Autowired
-    public StreetServiceImpl(StreetRepository streetRepository, MapStructMapper mapStructMapper) {
+    public StreetServiceImpl(StreetRepository streetRepository, MapStructMapper mapStructMapper, StreetMapper streetMapper) {
         this.streetRepository = streetRepository;
         this.mapStructMapper = mapStructMapper;
+        this.streetMapper = streetMapper;
     }
 
     @Override
@@ -52,8 +55,10 @@ public class StreetServiceImpl implements StreetService {
 
     @Override
     @Transactional
-    public void update(int id, Street street) {
+    public void update(int id, StreetDTO streetDTO) {
+        Street street = streetMapper.toStreet(streetDTO);
         if (!streetRepository.existsByStreetName(street.getStreetName())) {
+            street.setStreetName(streetDTO.getStreetName());
             streetRepository.save(street);
         } else throw new StreetAlreadyExistException();
 }

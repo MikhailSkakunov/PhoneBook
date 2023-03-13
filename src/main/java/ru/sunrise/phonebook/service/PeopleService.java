@@ -20,6 +20,8 @@ public interface PeopleService {
 
     void save(Person person);
 
+    void save(PersonDTO personDTO);
+
     void update(int id, Person person);
 
     void deleteById(int id);

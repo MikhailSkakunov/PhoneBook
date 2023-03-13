@@ -6,12 +6,12 @@
 </head>
 <body>
 
-<p th:text="${typeDTO.getId() + '. ' + 'Тип телефона: ' + typeDTO.typeName}"></p>
+<p th:text="${type.id + '. ' + 'Тип телефона: ' + type.typeName}"></p>
 
-<a th:href="@{/type/edit/{id}(id=${typeDTO.getId()})}">Редактировать</a>
+<a th:href="@{/type/edit/{id}(id=${type.id})}">Редактировать</a>
 <br>
 
-<form th:method="DELETE" th:action="@{/type/{id}(id=${typeDTO.getId()})}">
+<form th:method="DELETE" th:action="@{/type/{id}(id=${type.id})}">
     <input type="submit" value="Удалить!"/>
 </form>
 

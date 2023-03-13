@@ -6,7 +6,6 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
 @Entity
 @Table(name = "streets")
 public class Street {
@@ -19,7 +18,7 @@ public class Street {
     @Column(name = "street_name", nullable = false)
     private String streetName;
 
-    @OneToMany(mappedBy = "street", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "street", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @ToString.Exclude
     private List<Address> addresses = new ArrayList<>();
 
@@ -54,5 +53,14 @@ public class Street {
 
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    @Override
+    public String toString() {
+        return "Street{" +
+                "id=" + id +
+                ", streetName='" + streetName + '\'' +
+                ", addresses=" + addresses +
+                '}';
     }
 }

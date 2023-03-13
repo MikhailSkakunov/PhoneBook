@@ -53,11 +53,7 @@ public class PhoneTypeController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute("type") PhoneType phoneType,
-                         BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/type/new";
-        }
+    public String create(@ModelAttribute("type") PhoneType phoneType) {
         phoneTypeService.save(phoneType);
         return "redirect:/type";
     }
@@ -69,9 +65,10 @@ public class PhoneTypeController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("type") PhoneType phoneType,
+    public String update(@ModelAttribute("type") PhoneTypeDTO phoneTypeDTO,
                          @PathVariable("id") int id) {
-        phoneTypeService.update(id, phoneType);
+
+        phoneTypeService.update(id, phoneTypeDTO);
         return "redirect:/type";
     }
 

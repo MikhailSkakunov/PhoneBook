@@ -18,32 +18,32 @@
     <input th:type="text" th:field="*{patronymic}" id="patronymic"/>
     <br>
     <label for="city">Введите индекс и название города: </label>
-    <input th:type="text" th:field="*{address.city}" id="city"/>
+    <input th:type="text" th:field="*{addressDTO.city}" id="city"/>
 
 
     <div id="MyAddress">
         <label>Выбирите название улицы: </label>
-        <select th:field="*{address.street}">
-            <option th:each="str : ${street}"
-                    th:text="${str.streetName}"
-                    th:value="${str.id}">
+        <select th:field="*{addressDTO.streetDTO.id}">
+            <option th:each="strDTO : ${street}"
+                    th:text="${strDTO.streetName}"
+                    th:value="${strDTO.id}">
             </option>
         </select>
     </div>
 
     <label for="buildingNumber">Введите номер дома: </label>
-    <input th:type="text" th:field="*{address.buildingNumber}" id="buildingNumber"/>
+    <input th:type="text" th:field="*{addressDTO.buildingNumber}" id="buildingNumber"/>
     <br>
     <div class="myPhones">
         <label for="phone">Введите номер телефона: </label>
-        <div th:each="phone, itemStat : *{phones}" id="phone">
-            <input th:field="*{phones[__${itemStat.index}__].number}"/>
+        <div th:each="phoneDTO.number, itemStat : *{phonesDTO}" id="phone">
+            <input th:field="*{phonesDTO[__${itemStat.index}__].number}"/>
             <label for="phoneType">Тип телефона</label>
             <select id="phoneType" required>
-                <option th:each="phType : ${phoneTypes}"
-                        th:text="${phType.typeName}"
-                        th:value="${phType.id}"
-                        th:selected="${phone.phoneType.id == phType.id}">
+                <option th:each="phTypeDTO : ${phoneTypes}"
+                        th:text="${phTypeDTO.typeName}"
+                        th:value="${phTypeDTO.id}"
+                        th:selected="${phoneDTO.phoneTypeDTO.id == phTypeDTO.id}">
                 </option>
             </select>
         </div>
@@ -66,11 +66,12 @@
             console.log(types);
             console.log(index);
             let phoneTag = `<div>
-                    <input name="phones[${index}].number" type="text"/>
+                    <input name="phonesDTO[${index}].number" type="text"/>
                     <label for="phoneType">Тип телефона</label>
                     <select id="phoneType" name="phones[${index}].phoneType" required>
-                        ${types.map((e,idx)=> `<option key=${idx} value=${e.id}>${e.typeName}</option>`)}
+                        ${types.map((e,idx)=> `<option value=${e.id}>${e.typeName}</option>`)}
                     </select>
+
                 </div>`;
 
             $("#phones-container").append(phoneTag);

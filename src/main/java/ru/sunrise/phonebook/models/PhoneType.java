@@ -19,7 +19,7 @@ public class PhoneType {
     @Column(name = "type_name", nullable = false)
     private String typeName;
 
-    @OneToMany(mappedBy = "phoneType", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "phoneType", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @ToString.Exclude
     private List<Phone> phones = new ArrayList<>();
 

@@ -62,6 +62,11 @@ public class MyExceptionHandler {
         return "errors/phone_number_not_found_exception";
     }
 
+    @ExceptionHandler(value = AddressFieldsEmptyException.class)
+    public String AddressFieldsEmptyException(Model model) {
+        model.addAttribute("err", "AddressFieldsEmptyException");
+        return "errors/address_fields_empty_exception";
+    }
 
 
     @ExceptionHandler(value = Exception.class)

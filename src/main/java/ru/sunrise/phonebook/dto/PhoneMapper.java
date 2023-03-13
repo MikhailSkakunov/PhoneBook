@@ -10,14 +10,12 @@ import ru.sunrise.phonebook.models.Phone;
 @Mapper(componentModel = "spring", uses = {PhoneTypeMapper.class})
 public interface PhoneMapper {
 
-    PersonMapper INSTANCE = (PersonMapper) Mappers.getMapper(PhoneMapper.class);
-
-    @Mapping(target = "phoneType.id", ignore = true)
-    @Mapping(target = "owner.id", ignore = true)
+    @Mapping(target = "phoneType", source = "phoneTypeDTO")
+    @Mapping(target = "owner.id", source = "ownerId")
     Phone toPhone(PhoneDTO phoneDTO);
 
     @InheritInverseConfiguration
     @Mapping(target = "phoneTypeDTO", source = "phoneType")
     @Mapping(target = "ownerId", source = "owner.id")
-    PhoneDTO toPhoneDTO(Phone phone, @Context Phone phoneType);
+    PhoneDTO toPhoneDTO(Phone phone);
 }
